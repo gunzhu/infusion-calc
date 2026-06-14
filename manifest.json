@@ -1,0 +1,15 @@
+{
+  "name": "输液计算器",
+  "short_name": "输液计算",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#007aff",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
