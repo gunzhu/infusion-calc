@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <!-- iPhone全屏适配关键 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="white">
+  <title>输液输血计算器</title>
+  <link rel="manifest" href="./manifest.json">
+  <style>
+    *{box-sizing: border-box;margin:0;padding:0;font-family: system-ui;}
+    body{padding:20px;background:#f5f7fa;}
+    .box{background:#fff;border-radius:12px;padding:16px;margin-bottom:20px;box-shadow:0 2px 8px #00000010;}
+    h3{margin-bottom:12px;color:#333;}
+    input{width:100%;padding:12px 10px;margin:8px 0;border:1px solid #ddd;border-radius:8px;font-size:16px;}
+    button{width:100%;padding:14px;border:none;border-radius:8px;background:#007aff;color:#fff;font-size:16px;margin-top:10px;}
+    .res{margin-top:12px;padding:10px;background:#f0f7ff;border-radius:8px;font-weight:500;color:#0055bb;}
+  </style>
+</head>
+<body>
+  <!-- 模块1：已知总量，算输液时长 -->
+  <div class="box">
+    <h3>① 输入液体总量 → 计算输注用时</h3>
+    <input id="mlTotal" placeholder="输入液体总量(ml)" type="number">
+    <input id="dripSpeed1" placeholder="输入滴速(滴/分)" type="number">
+    <button onclick="calcTime()">计算总时长 + 开启倒计时</button>
+    <div class="res" id="resTime"></div>
+  </div>
+
+  <!-- 模块2：已知时长滴速，算输注用量 -->
+  <div class="box">
+    <h3>② 输入时长滴速 → 计算已输毫升</h3>
+    <input id="dripSpeed2" placeholder="输入滴速(滴/分)" type="number">
+    <input id="timeMin" placeholder="已输注时长(分钟)" type="number">
+    <button onclick="calcMl()">计算已输注液体</button>
+    <div class="res" id="resMl"></div>
+  </div>
+
+<script>
+const dripFactor = 15; // 固定滴系数15滴/mL
+
+// 1. 总量算时长
+function calcTime(){
+  let ml = Number(document.getElementById('mlTotal').value);
+  let drip = Number(document.getElementById('dripSpeed1').value);
+  if(!ml || !drip){alert('请填写完整数字');return;}
+  let totalMin = (ml * dripFactor) / drip;
+  let h = Math.floor(totalMin / 60);
+  let m = (totalMin % 60).toFixed(1);
+  let text = `总输注时长：${h}小时${m}分钟`;
+  document.getElementById('resTime').innerText = text;
+  // 简易网页倒计时（前台可用，锁屏失效，仅辅助）
+}
+
+// 2. 时长算用量
+function calcMl(){
+  let drip = Number(document.getElementById('dripSpeed2').value);
+  let min = Number(document.getElementById('timeMin').value);
+  if(!drip || !min){alert('请填写完整数字');return;}
+  let ml = (drip * min) / dripFactor;
+  document.getElementById('resMl').innerText = `已输注液体：${ml.toFixed(2)} ml`;
+}
+</script>
+</body>
+</html>
